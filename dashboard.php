@@ -37,6 +37,9 @@ $issue_data = mysqli_fetch_assoc($issue_query);
 <a href="issue_book.php">Issue Book</a><br><br>
 
 <a href="return_book.php">Return Book</a>
+<br><br>
+
+<a href="transactions.php">Transaction History</a>
 
 </body>
 </html>
