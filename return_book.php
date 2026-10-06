@@ -9,7 +9,8 @@ if (isset($_POST['return_book'])) {
 
     $query = mysqli_query(
         $conn,
-        "SELECT book_id FROM transactions 
+        "SELECT book_id, issue_date
+         FROM transactions
          WHERE id='$transaction_id' AND status='Issued'"
     );
 
@@ -18,23 +19,37 @@ if (isset($_POST['return_book'])) {
     if ($transaction) {
 
         $book_id = $transaction['book_id'];
+        $issue_date = $transaction['issue_date'];
         $return_date = date("Y-m-d");
+
+        $start = new DateTime($issue_date);
+        $end = new DateTime($return_date);
+
+        $days = $start->diff($end)->days;
+
+        $fine = 0;
+
+        if ($days > 7) {
+            $fine = ($days - 7) * 5;
+        }
 
         mysqli_query(
             $conn,
-            "UPDATE transactions 
-             SET return_date='$return_date', status='Returned'
+            "UPDATE transactions
+             SET return_date='$return_date',
+                 status='Returned',
+                 fine='$fine'
              WHERE id='$transaction_id'"
         );
 
         mysqli_query(
             $conn,
-            "UPDATE books 
+            "UPDATE books
              SET available = available + 1
              WHERE id='$book_id'"
         );
 
-        $message = "Book returned successfully.";
+        $message = "Book returned successfully. Fine: ₹" . $fine;
 
     } else {
 
