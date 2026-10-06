@@ -26,6 +26,7 @@ $result = mysqli_query($conn, "SELECT * FROM books");
     <th>Category</th>
     <th>Quantity</th>
     <th>Available</th>
+    <th>Action</th>
 </tr>
 
 <?php
@@ -39,6 +40,14 @@ while ($row = mysqli_fetch_assoc($result)) {
     <td><?php echo $row['category']; ?></td>
     <td><?php echo $row['quantity']; ?></td>
     <td><?php echo $row['available']; ?></td>
+    <td>
+    <a href="edit_book.php?id=<?php echo $row['id']; ?>">Edit</a>
+    |
+    <a href="delete_book.php?id=<?php echo $row['id']; ?>"
+       onclick="return confirm('Are you sure you want to delete this book?');">
+       Delete
+    </a>
+</td>
 </tr>
 
 <?php
